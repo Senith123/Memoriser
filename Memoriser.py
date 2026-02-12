@@ -1,4 +1,5 @@
 from tkinter import*
+from tkinter.filedialog import*
 screen = Tk()
 screen.geometry("500x500")
 screen.title("Memoriser")
@@ -11,11 +12,24 @@ def add_item():
 def delete_item():
     item = list.curselection()
     list.delete(item)
-open = Button (screen, text = "OPEN", bg = "olive drab", fg = "dark sea green", font = ("times", 20, "bold"))
+def save_item():
+    file = asksaveasfile(defaultextension = ".txt")
+    for item in list.get(0,END):
+        print(item, file = file)
+    list.delete(0, END)
+def open_item():
+    file = askopenfile(title = "open file")
+    if file is not None:
+        list.delete(0, END)
+        items = file.readlines()
+        for item in items:
+            list.insert(END, item.strip())
+
+open = Button (screen, text = "OPEN", bg = "olive drab", fg = "dark sea green", font = ("times", 20, "bold"), command = open_item)
 open.place(x = 10, y = 10)
 delete = Button (screen, text = "DELETE", bg = "olive drab", fg = "dark sea green", font = ("times", 20, "bold"), command = delete_item)
 delete.place(x = 195, y = 10)
-save = Button (screen, text = "SAVE", bg = "olive drab", fg = "dark sea green", font = ("times", 20, "bold"))
+save = Button (screen, text = "SAVE", bg = "olive drab", fg = "dark sea green", font = ("times", 20, "bold"), command = save_item)
 save.place(x = 395, y = 10)
 entry = Entry(bd = 5, bg = "olive drab", fg = "dark sea green", width = 20, font = ("times", 26, "bold"))
 entry.place(x = 10, y = 85)
